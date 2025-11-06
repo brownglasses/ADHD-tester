@@ -6,28 +6,32 @@
 const theme = {
   // 색상
   colors: {
-    // Primary (메인 컬러 - 신뢰감을 주는 블루 계열)
-    primary: "#4A90E2",
-    primaryHover: "#357ABD",
-    primaryLight: "#E3F2FD",
+    // Primary (메인 컬러 - Sprout Green 새싹 연두)
+    primary: "#C3D9A5",
+    primaryHover: "#B0C890",
+    primaryLight: "#E8F0DC",
 
-    // Secondary (보조 컬러)
-    secondary: "#7B68EE",
-    secondaryHover: "#6A5ACD",
+    // Accent (강조 컬러 - Supportive Orange 서포티브 오렌지)
+    accent: "#FFDDAA",
+    accentHover: "#FFD088",
+
+    // Secondary (기존 호환성 유지)
+    secondary: "#FFDDAA",
+    secondaryHover: "#FFD088",
 
     // 텍스트
     text: {
-      primary: "#333333",
-      secondary: "#666666",
-      disabled: "#999999",
+      primary: "#4A4A4A", // Charcoal
+      secondary: "#A1A1A1", // Stone Gray
+      disabled: "#CCCCCC",
       white: "#FFFFFF",
     },
 
     // 배경
     background: {
       primary: "#FFFFFF",
-      secondary: "#F8F9FA",
-      tertiary: "#F0F0F0",
+      secondary: "#F8F9FA", // Cloud White
+      tertiary: "#F0F2F5",
     },
 
     // 상태 색상
