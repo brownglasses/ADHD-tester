@@ -6,10 +6,10 @@
 const theme = {
   // 색상
   colors: {
-    // Primary (메인 컬러 - Sprout Green 새싹 연두)
-    primary: "#C3D9A5",
-    primaryHover: "#B0C890",
-    primaryLight: "#E8F0DC",
+    // Primary (메인 컬러 - Calm Green 캄 그린)
+    primary: "#96BE80",
+    primaryHover: "#7FA96A",
+    primaryLight: "#E8F2E2", // 더 자연스러운 연한 녹색
 
     // Accent (강조 컬러 - Supportive Orange 서포티브 오렌지)
     accent: "#FFDDAA",
@@ -21,30 +21,30 @@ const theme = {
 
     // 텍스트
     text: {
-      primary: "#4A4A4A", // Charcoal
-      secondary: "#A1A1A1", // Stone Gray
-      disabled: "#CCCCCC",
+      primary: "#3D4A3D", // 약간 녹색 톤의 Charcoal
+      secondary: "#6B7B6B", // 약간 녹색 톤의 Gray
+      disabled: "#C5CFC5", // 약간 녹색 톤의 Light Gray
       white: "#FFFFFF",
     },
 
     // 배경
     background: {
       primary: "#FFFFFF",
-      secondary: "#F8F9FA", // Cloud White
-      tertiary: "#F0F2F5",
+      secondary: "#F7FAF5", // 아주 연한 녹색 톤
+      tertiary: "#EFF5EB", // 연한 녹색 배경
     },
 
     // 상태 색상
-    success: "#4CAF50",
-    warning: "#FF9800",
-    error: "#F44336",
-    info: "#2196F3",
+    success: "#7FA96A", // Primary Hover와 동일 (일관성)
+    warning: "#FFB347", // 부드러운 오렌지
+    error: "#E57373", // 부드러운 레드
+    info: "#64B5F6", // 부드러운 블루
 
     // 테두리
     border: {
-      light: "#E0E0E0",
-      medium: "#BDBDBD",
-      dark: "#757575",
+      light: "#E1E8DD", // 약간 녹색 톤
+      medium: "#C1D0BA", // 녹색 톤의 중간 테두리
+      dark: "#8FA382", // 녹색 톤의 진한 테두리
     },
   },
 
@@ -80,12 +80,13 @@ const theme = {
     "3xl": "4rem", // 64px
   },
 
-  // 보더 라운드
+  // 보더 라운드 (더 동글동글한 느낌)
   borderRadius: {
-    sm: "4px",
-    md: "8px",
-    lg: "12px",
-    xl: "16px",
+    sm: "6px",
+    md: "12px",
+    lg: "16px",
+    xl: "20px",
+    "2xl": "24px",
     full: "9999px",
   },
 

@@ -43,7 +43,7 @@ const StyledButton = styled.button`
   justify-content: center;
   gap: ${({ theme }) => theme.spacing.sm};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
   transition: all ${({ theme }) => theme.transition.fast};
   cursor: pointer;
   border: none;
