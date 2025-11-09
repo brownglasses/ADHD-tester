@@ -31,22 +31,23 @@
 ### 브랜드 철학
 
 우리의 컬러는 사용자를 자극하거나 산만하게 해서는 안 됩니다.
-새싹이 돋아나는 듯한 부드러운 연두색을 중심으로, 사용자가 편안하고 차분한 상태에서 검사에 집중할 수 있도록 돕습니다.
+안정적이고 차분한 녹색을 중심으로, 사용자가 편안한 상태에서 검사에 집중할 수 있도록 돕습니다.
+신뢰감과 전문성을 전달하면서도 따뜻함을 잃지 않습니다.
 
-### Primary Color (메인 컬러) - Sprout Green (새싹 연두)
+### Primary Color (메인 컬러) - Calm Green (캄 그린)
 
 ```
-Primary:       #C3D9A5  (Sprout Green - 새싹 연두)
-Primary Hover: #B0C890  (진한 새싹 연두 - 호버)
-Primary Light: #E8F0DC  (연한 새싹 연두 - 배경)
+Primary:       #96BE80  (Calm Green - 캄 그린)
+Primary Hover: #7FA96A  (진한 캄 그린 - 호버)
+Primary Light: #E8F2E2  (연한 캄 그린 - 배경)
 ```
 
 **특징:**
 
-- 🌱 너무 밝지 않고 채도가 낮은 편안한 파스텔 톤
-- 🌿 '성장', '새로운 시작'의 느낌
-- 👁️ 눈을 편안하게 하여 집중을 도움
-- ✨ 친근하면서도 전문적인 인상
+- 🍃 안정적이고 차분한 녹색 (안정된 잎사귀 톤)
+- 💚 전문성과 신뢰감을 전달
+- 👁️ 눈을 편안하게 하면서도 선명함 유지
+- ⚖️ 친근하면서도 전문적인 균형감
 
 **사용처:**
 
@@ -65,7 +66,7 @@ Accent Hover: #FFD088  (진한 서포티브 오렌지)
 **특징:**
 
 - 🧡 따뜻하고 부드러운 파스텔 톤 (살구색에 가까움)
-- 💫 Sprout Green과 조화롭게 어울림
+- 💫 Calm Green과 조화롭게 어울림
 - 🤝 긍정적이고 지지해주는 느낌
 - ⭐ 주목도를 높이면서도 자극적이지 않음
 
@@ -75,41 +76,52 @@ Accent Hover: #FFD088  (진한 서포티브 오렌지)
 - 중요한 알림
 - 강조가 필요한 핵심 요소
 
-### Neutral Colors (중립 색상)
+### Neutral Colors (중립 색상) - Calm Green 톤과 조화
 
 ```
-Charcoal (차콜):      #4A4A4A  (기본 텍스트)
-Stone Gray (스톤):    #A1A1A1  (보조 텍스트)
-Light Gray (연회색):  #CCCCCC  (비활성)
-Pure White (순백):    #FFFFFF  (카드, 버튼 텍스트)
+Green Charcoal (차콜):    #3D4A3D  (기본 텍스트, 녹색 톤)
+Green Gray (그린 그레이):  #6B7B6B  (보조 텍스트, 녹색 톤)
+Light Green Gray:         #C5CFC5  (비활성, 녹색 톤)
+Pure White (순백):        #FFFFFF  (카드, 버튼 텍스트)
 
-Cloud White (배경):   #F8F9FA  (메인 배경)
-Light Cloud (배경):   #F0F2F5  (섹션 배경)
+Soft Green White (배경):  #F7FAF5  (메인 배경, 연한 녹색)
+Light Green Tint (배경):  #EFF5EB  (섹션 배경, 연한 녹색)
 ```
 
 **특징:**
 
-- 📖 순수 검은색(#000) 대신 부드러운 차콜 사용
-- 👀 흰 배경의 눈부심 감소 (Cloud White)
-- 💤 장시간 사용에도 눈의 피로 최소화
+- 🍃 모든 중립 색상에 Calm Green 톤 가미
+- 📖 순수 검은색 대신 녹색 톤의 차콜 사용
+- 👀 연한 녹색 배경으로 눈의 편안함 증대
+- 💤 전체적인 색상 조화로 눈의 피로 최소화
 - ♿ WCAG AA 대비 기준 준수
 
-### State Colors (상태 색상)
+### State Colors (상태 색상) - 부드러운 톤
 
 ```
-Success: #4CAF50  (성공 - 완료, 통과)
-Warning: #FFC107  (경고 - 주의 필요)
-Error:   #F44336  (오류 - 실패, 위험)
-Info:    #2196F3  (정보 - 안내)
+Success: #7FA96A  (성공 - Primary Hover와 일관성)
+Warning: #FFB347  (경고 - 부드러운 오렌지)
+Error:   #E57373  (오류 - 부드러운 레드)
+Info:    #64B5F6  (정보 - 부드러운 블루)
 ```
 
-### Border Colors (테두리)
+**특징:**
+
+- 전체적으로 채도를 낮춰 자극을 최소화
+- Success는 Primary 계열로 통일하여 일관성 강화
+
+### Border Colors (테두리) - Calm Green 톤과 조화
 
 ```
-Border Light:  #E0E0E0  (연한 테두리)
-Border Medium: #BDBDBD  (중간 테두리)
-Border Dark:   #757575  (진한 테두리)
+Border Light:  #E1E8DD  (연한 테두리, 녹색 톤)
+Border Medium: #C1D0BA  (중간 테두리, 녹색 톤)
+Border Dark:   #8FA382  (진한 테두리, 녹색 톤)
 ```
+
+**특징:**
+
+- 모든 테두리에 Calm Green 톤을 가미
+- 전체적인 색상 통일감 강화
 
 ---
 
@@ -201,7 +213,7 @@ xl:  32px  (2rem)     - 섹션 간격
 
 **Border Radius:**
 
-- 8px (중간 라운드 - 친근하면서 전문적)
+- 16px (부드러운 라운드 - 친근하고 편안한 느낌)
 
 **상태:**
 
@@ -213,13 +225,13 @@ xl:  32px  (2rem)     - 섹션 간격
 
 **높이:** 44px (터치 영역)
 **Border:** 1px solid #E0E0E0
-**Border Radius:** 8px
+**Border Radius:** 12px
 **Focus:** 2px solid Primary Color
 
 ### 카드 (Card)
 
 **배경:** #FFFFFF
-**Border Radius:** 12px
+**Border Radius:** 20px
 **그림자:** 0 4px 6px rgba(0, 0, 0, 0.1)
 **패딩:** 24px
 
@@ -333,6 +345,30 @@ outline-offset: 2px
 
 ## 🔄 업데이트 기록
 
+- 2024.11.07 v5.1: 전체 컬러 팔레트 조화 업데이트
+
+  - 모든 색상을 Calm Green과 조화롭게 재조정
+  - 텍스트 색상에 녹색 톤 가미 (차분한 느낌 강화)
+  - 배경 색상에 연한 녹색 톤 추가 (눈의 편안함)
+  - 테두리 색상 통일 (녹색 톤)
+  - 상태 색상 채도 조정 (부드러운 톤)
+  - 전체적인 색상 일관성과 조화 강화
+
+- 2024.11.07 v5: Primary Color 업데이트
+
+  - Sprout Green (#C3D9A5) → Calm Green (#96BE80)
+  - 더 선명하고 안정감 있는 녹색으로 변경
+  - 전문성과 신뢰감 강화
+  - 기존의 '편안함'과 '집중' 철학 유지
+
+- 2024.11.07 v4: Border Radius 업데이트
+
+  - 전체적으로 더 동글동글한 느낌으로 변경
+  - 버튼: 8px → 16px
+  - 카드: 12px → 20px
+  - 입력 필드: 8px → 12px
+  - 부드럽고 친근한 UI 강화
+
 - 2024.11.06 v3: 타이포그래피 업데이트
 
   - Primary Font: Pretendard로 변경
@@ -340,7 +376,7 @@ outline-offset: 2px
   - Variable Font 지원 (9가지 굵기)
   - CDN을 통한 빠른 로딩
 
-- 2024.11.06 v2: 브랜드 컬러 파스텔 톤 업데이트
+- 2024.11.06 v2: 브랜드 컬러 파스텔 톤 (v1 업데이트)
 
   - Primary Color: Sprout Green (#C3D9A5) - 부드러운 파스텔 톤
   - Accent Color: Supportive Orange (#FFDDAA) - 따뜻한 살구색
