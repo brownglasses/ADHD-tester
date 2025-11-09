@@ -15,7 +15,6 @@ function Landing() {
   const testSteps = [
     { label: "현재 증상", description: "ASRS 설문" },
     { label: "과거 증상", description: "WURS 설문" },
-    { label: "집중력 확인", description: "CPT 과제" },
     { label: "결과 확인", description: "종합 분석" },
   ];
 
@@ -47,7 +46,7 @@ function Landing() {
       {/* Process Section */}
       <ProcessSection>
         <SectionTitle>검사 진행 과정</SectionTitle>
-        <SectionSubtitle>4단계로 간편하게 진행됩니다</SectionSubtitle>
+        <SectionSubtitle>3단계로 간편하게 진행됩니다</SectionSubtitle>
         
         <StepperWrapper>
           <Stepper currentStep={-1} steps={testSteps} variant="primary" />
@@ -71,10 +70,10 @@ function Landing() {
         <InfoCards>
           <InfoCard variant="primary" padding="xl">
             <InfoIcon>⏱️</InfoIcon>
-            <InfoTitle>약 15분 소요</InfoTitle>
+            <InfoTitle>약 10분 소요</InfoTitle>
             <InfoText>
-              간단한 질문에 답변하고<br />
-              집중력 과제를 수행합니다
+              현재와 과거의 증상에 대한<br />
+              간단한 질문에 답변합니다
             </InfoText>
           </InfoCard>
 

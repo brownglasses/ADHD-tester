@@ -3,14 +3,14 @@ import { persist } from "zustand/middleware";
 
 /**
  * 테스트 답변 & 결과 관리 (Zustand)
- * - ASRS, WURS, CPT 답변 및 점수
+ * - ASRS, WURS 답변 및 점수
  * - 결과 페이지에서 사용
  */
 
 const useTestStore = create(
   persist(
     (set) => ({
-      // ASRS 상태
+      // ASRS 상태 (1단계: 현재 증상)
       asrs: {
         answers: [], // [0, 1, 2, 3, 4, 0, ...]
         score: null,
@@ -18,21 +18,10 @@ const useTestStore = create(
         completedAt: null,
       },
 
-      // WURS 상태
+      // WURS 상태 (2단계: 과거 증상)
       wurs: {
         answers: [],
         score: null,
-        interpretation: null,
-        completedAt: null,
-      },
-
-      // CPT 상태
-      cpt: {
-        results: [], // [{ type: 'X', responded: true, reactionTime: 450 }, ...]
-        correctCount: null,
-        missCount: null,
-        falseAlarmCount: null,
-        averageReactionTime: null,
         interpretation: null,
         completedAt: null,
       },
@@ -83,24 +72,6 @@ const useTestStore = create(
           },
         })),
 
-      // CPT 액션
-      saveCptResult: (trial) =>
-        set((state) => ({
-          cpt: {
-            ...state.cpt,
-            results: [...state.cpt.results, trial],
-          },
-        })),
-
-      completeCpt: (stats) =>
-        set((state) => ({
-          cpt: {
-            ...state.cpt,
-            ...stats,
-            completedAt: new Date().toISOString(),
-          },
-        })),
-
       // 전체 초기화
       resetAllTests: () =>
         set({
@@ -113,15 +84,6 @@ const useTestStore = create(
           wurs: {
             answers: [],
             score: null,
-            interpretation: null,
-            completedAt: null,
-          },
-          cpt: {
-            results: [],
-            correctCount: null,
-            missCount: null,
-            falseAlarmCount: null,
-            averageReactionTime: null,
             interpretation: null,
             completedAt: null,
           },

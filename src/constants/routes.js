@@ -10,19 +10,15 @@ export const ROUTES = {
   // 인증
   LOGIN: "/login",
   
-  // ASRS 설문
+  // ASRS 설문 (1단계: 현재 증상)
   ASRS_INTRO: "/asrs/intro",
   ASRS_TEST: "/asrs/test",
   
-  // WURS 설문
+  // WURS 설문 (2단계: 과거 증상)
   WURS_INTRO: "/wurs/intro",
   WURS_TEST: "/wurs/test",
   
-  // CPT 과제
-  CPT_INTRO: "/cpt/intro",
-  CPT_TEST: "/cpt/test",
-  
-  // 결과
+  // 결과 (3단계)
   RESULT: "/result",
   
   // 병원 정보

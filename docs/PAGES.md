@@ -26,7 +26,7 @@
 ```
 Landing
 ├── Hero Section         - 메인 비주얼 + CTA
-├── Process Section      - 검사 4단계 소개
+├── Process Section      - 검사 3단계 소개
 ├── Info Section         - 주요 정보 (시간, 보안, 과학적 근거)
 ├── Disclaimer Section   - 중요 안내사항
 ├── CTA Section          - 재차 검사 시작 유도
@@ -63,9 +63,8 @@ Landing
 
 ```jsx
 <ProcessSection>
-  - Stepper: 4단계 시각화 (데스크톱만) - ProcessCards: 각 단계 상세 설명 1. 현재
-  증상 (ASRS 설문) 2. 과거 증상 (WURS 설문) 3. 집중력 확인 (CPT 과제) 4. 결과
-  확인 (종합 분석)
+  - Stepper: 3단계 시각화 (데스크톱만) - ProcessCards: 각 단계 상세 설명 1. 현재
+  증상 (ASRS 설문) 2. 과거 증상 (WURS 설문) 3. 결과 확인 (종합 분석)
 </ProcessSection>
 ```
 
@@ -78,7 +77,7 @@ Landing
 
 ```jsx
 <InfoSection>
-  - 3개의 InfoCard (그리드) - ⏱️ 약 15분 소요 - 🔒 안전한 개인정보 - 📊 과학적
+  - 3개의 InfoCard (그리드) - ⏱️ 약 10분 소요 - 🔒 안전한 개인정보 - 📊 과학적
   근거 기반
 </InfoSection>
 ```
@@ -610,6 +609,10 @@ line-height: 1.6;
 
 ## 🔄 업데이트 기록
 
+- 2024.11.09 v2: MVP 범위 조정 - CPT 제거
+  - 검사 구조 변경: 4단계 → 3단계 (ASRS + WURS + 결과)
+  - CPT 관련 내용 전체 제거
+  - 소요 시간 조정: 15분 → 10분
 - 2024.11.09: ASRS Intro 및 Test 페이지 문서화
   - 필수 안내문 및 3단계 구조 반영
   - WHO ASRS-v1.1 및 DSM-5 기반 질문 추가
@@ -624,5 +627,4 @@ line-height: 1.6;
 - [x] ASRS Test 페이지 문서화
 - [ ] Login 페이지 문서화
 - [ ] WURS 페이지 문서화
-- [ ] CPT 페이지 문서화
 - [ ] Result 페이지 문서화

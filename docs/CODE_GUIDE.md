@@ -10,7 +10,7 @@
 
 - 가독성, 안정성, 확장성을 최우선으로
 - 공감 기반 UX: 인지적 부담 최소화
-- 전문성: 검증된 척도(ASRS, WURS, CPT) 기반
+- 전문성: 검증된 척도(ASRS, WURS) 기반
 
 ---
 
@@ -36,7 +36,7 @@ src/
 ├── pages/           # 라우트 페이지 (Landing, Asrs, Wurs, Cpt, Result...)
 ├── components/      # 전역 재사용 컴포넌트 (Button, Modal, Header...)
 ├── store/          # Zustand (useAuthStore, useTestStore, useUIStore)
-├── services/       # API 호출 (firebase/, kakao/)
+├── services/       # API 호출 (firebase/)
 ├── constants/      # 상수 데이터 (질문, 라우트, 설정)
 ├── utils/          # 유틸 함수
 ├── styles/         # 전역 스타일 (theme.js, GlobalStyles.js)
@@ -45,7 +45,7 @@ src/
 
 **파일 배치 규칙:**
 
-- `pages/`: 라우트 URL과 1:1 매칭되는 페이지
+- `pages/`: 라우트 URL과 1:1 매칭되는 페이지 (Landing, Asrs, Wurs, Result)
 - `components/`: 2개 이상 페이지에서 재사용
 - 특정 페이지 전용 → `pages/{페이지}/` 안에 배치
 
@@ -61,7 +61,7 @@ src/
 ### 2️⃣ 1화면 1과업
 
 - 설문: 한 번에 한 질문만
-- CPT: 과제 외 모든 UI 숨기기
+- 결과: 한 눈에 파악 가능한 명확한 정보
 
 ### 3️⃣ 전문성을 통한 신뢰
 
@@ -157,7 +157,7 @@ const Title = styled.h1`
 
 ```javascript
 useAuthStore; // 사용자 인증 정보
-useTestStore; // ASRS/WURS/CPT 답변 & 결과
+useTestStore; // ASRS/WURS 답변 & 결과
 useUIStore; // 모달, 로딩, 알림
 ```
 
