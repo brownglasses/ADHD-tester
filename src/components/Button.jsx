@@ -48,6 +48,10 @@ const StyledButton = styled.button`
   cursor: pointer;
   border: none;
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
+  
+  /* 클릭 애니메이션을 위한 설정 */
+  position: relative;
+  overflow: hidden;
 
   /* 크기별 스타일 */
   ${({ size, theme }) => {
@@ -119,13 +123,36 @@ const StyledButton = styled.button`
 
   /* 활성화 상태 (클릭) */
   &:active:not(:disabled) {
-    transform: translateY(0);
+    transform: scale(0.98);
+    transition: transform 100ms ease;
   }
 
   /* 포커스 스타일 (접근성) */
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 2px;
+  }
+
+  /* 클릭 시 ripple 효과 */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    transition: width 500ms ease, height 500ms ease, opacity 500ms ease;
+    opacity: 0;
+  }
+
+  &:active:not(:disabled)::after {
+    width: 300px;
+    height: 300px;
+    opacity: 0.3;
+    transition: width 0ms, height 0ms, opacity 400ms ease;
   }
 `;
 

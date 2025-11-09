@@ -172,6 +172,26 @@ const StyledRadioOption = styled.label`
   &:active:not([aria-disabled="true"]) {
     transform: translateY(0);
   }
+
+  /* 선택 시 펄스 애니메이션 */
+  ${({ isChecked, theme }) =>
+    isChecked &&
+    `
+    animation: selectPulse 300ms ease-in-out;
+    box-shadow: 0 0 0 3px ${theme.colors.primaryLight};
+  `}
+
+  @keyframes selectPulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 `;
 
 const HiddenInput = styled.input`

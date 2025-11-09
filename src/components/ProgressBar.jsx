@@ -141,8 +141,10 @@ const BarFill = styled.div`
   width: ${({ percent }) => `${percent}%`};
   border-radius: ${({ theme }) => theme.borderRadius.full};
   position: relative;
-  transition: ${({ animated, theme }) => 
-    animated ? `width ${theme.transition.base}` : "none"};
+  
+  /* smooth transition with easing */
+  transition: ${({ animated }) => 
+    animated ? "width 400ms cubic-bezier(0.4, 0, 0.2, 1), opacity 200ms ease" : "none"};
   
   /* 색상 변형 */
   ${({ variant, theme }) => {
@@ -156,6 +158,23 @@ const BarFill = styled.div`
         return `background: ${theme.colors.primary};`;
     }
   }}
+  
+  /* 완료 시 반짝임 효과 */
+  ${({ percent }) =>
+    percent === 100 &&
+    `
+    animation: complete 600ms ease-in-out;
+  `}
+  
+  @keyframes complete {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.85;
+      filter: brightness(1.1);
+    }
+  }
   
   /* 줄무늬 패턴 */
   ${({ striped }) =>

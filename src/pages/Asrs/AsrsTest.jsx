@@ -37,11 +37,15 @@ function AsrsTest() {
   const [impairmentAnswers, setImpairmentAnswers] = useState({}); // 2단계
   const [childhoodAnswer, setChildhoodAnswer] = useState(null); // 3단계
 
+  // 애니메이션 상태
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [nextStage, setNextStage] = useState(null);
+  const [nextIndex, setNextIndex] = useState(null);
+
   // 전체 검사 단계 (MiniStepper용)
   const testSteps = [
     { label: "현재 증상", description: "ASRS 설문" },
     { label: "과거 증상", description: "WURS 설문" },
-    { label: "집중력 확인", description: "CPT 과제" },
     { label: "결과 확인", description: "종합 분석" },
   ];
 
@@ -114,6 +118,25 @@ function AsrsTest() {
 
   const { current: totalCurrent, total: totalTotal } = getTotalProgress();
 
+  // 다음 질문 정보 가져오기 (애니메이션용)
+  const getNextQuestions = () => {
+    if (nextStage === 1) return ASRS_SYMPTOM_QUESTIONS;
+    if (nextStage === 2) return ASRS_IMPAIRMENT_QUESTIONS;
+    if (nextStage === 3) return [ASRS_CHILDHOOD_QUESTION];
+    return [];
+  };
+
+  const getNextOptions = () => {
+    if (nextStage === 1) return ASRS_SYMPTOM_OPTIONS;
+    if (nextStage === 2) return ASRS_IMPAIRMENT_OPTIONS;
+    if (nextStage === 3) return ASRS_CHILDHOOD_OPTIONS;
+    return [];
+  };
+
+  const nextQuestions = isTransitioning ? getNextQuestions() : [];
+  const nextOptions = isTransitioning ? getNextOptions() : [];
+  const nextQuestion = isTransitioning && nextQuestions[nextIndex] ? nextQuestions[nextIndex] : null;
+
   // 답변 저장
   const handleAnswerChange = (value) => {
     if (currentStage === 1) {
@@ -143,28 +166,68 @@ function AsrsTest() {
       if (isLastStage) {
         // 전체 검사 완료
         handleComplete();
+        return;
       } else {
         // 다음 단계로 이동
-        setCurrentStage(currentStage + 1);
-        setCurrentIndex(0);
+        setNextStage(currentStage + 1);
+        setNextIndex(0);
       }
     } else {
       // 같은 단계 내 다음 질문
-      setCurrentIndex(currentIndex + 1);
+      setNextStage(currentStage);
+      setNextIndex(currentIndex + 1);
     }
+
+    // 애니메이션 시작
+    setIsTransitioning(true);
+
+    // 애니메이션 완료 후 실제 상태 업데이트
+    setTimeout(() => {
+      if (isLastQuestionInStage) {
+        if (!isLastStage) {
+          setCurrentStage(currentStage + 1);
+          setCurrentIndex(0);
+        }
+      } else {
+        setCurrentIndex(currentIndex + 1);
+      }
+      
+      setIsTransitioning(false);
+      setNextStage(null);
+      setNextIndex(null);
+    }, 400);
   };
 
   // 이전 질문
   const handlePrevious = () => {
     if (currentIndex > 0) {
       // 같은 단계 내 이전 질문
-      setCurrentIndex(currentIndex - 1);
+      setNextStage(currentStage);
+      setNextIndex(currentIndex - 1);
     } else if (currentStage > 1) {
       // 이전 단계의 마지막 질문으로
-      setCurrentStage(currentStage - 1);
       const prevQuestions = currentStage === 2 ? ASRS_SYMPTOM_QUESTIONS : ASRS_IMPAIRMENT_QUESTIONS;
-      setCurrentIndex(prevQuestions.length - 1);
+      setNextStage(currentStage - 1);
+      setNextIndex(prevQuestions.length - 1);
     }
+
+    // 애니메이션 시작
+    setIsTransitioning(true);
+
+    // 애니메이션 완료 후 실제 상태 업데이트
+    setTimeout(() => {
+      if (currentIndex > 0) {
+        setCurrentIndex(currentIndex - 1);
+      } else if (currentStage > 1) {
+        setCurrentStage(currentStage - 1);
+        const prevQuestions = currentStage === 2 ? ASRS_SYMPTOM_QUESTIONS : ASRS_IMPAIRMENT_QUESTIONS;
+        setCurrentIndex(prevQuestions.length - 1);
+      }
+      
+      setIsTransitioning(false);
+      setNextStage(null);
+      setNextIndex(null);
+    }, 400);
   };
 
   // 검사 완료
@@ -249,60 +312,116 @@ function AsrsTest() {
           </InstructionCard>
         )}
 
-        {/* 질문 카드 */}
-        <QuestionCard padding="xl">
-          <QuestionHeader>
-            <QuestionNumber>
-              질문 {currentIndex + 1} / {totalQuestions}
-            </QuestionNumber>
-            {currentQuestion.category && (
-              <CategoryBadge>{currentQuestion.category}</CategoryBadge>
-            )}
-          </QuestionHeader>
+        {/* 질문 카드 컨테이너 (애니메이션용) */}
+        <QuestionCardContainer>
+          {/* 현재 질문 (슬라이드 아웃) */}
+          <QuestionCard 
+            padding="xl" 
+            $isExiting={isTransitioning}
+          >
+            <QuestionHeader>
+              <QuestionNumber>
+                질문 {currentIndex + 1} / {totalQuestions}
+              </QuestionNumber>
+              {currentQuestion.category && (
+                <CategoryBadge>{currentQuestion.category}</CategoryBadge>
+              )}
+            </QuestionHeader>
 
-          <Question>{currentQuestion.question}</Question>
+            <Question>{currentQuestion.question}</Question>
 
-          <AnswerSection>
-            <AnswerLabel>답변을 선택해 주세요</AnswerLabel>
-            <RadioGroup
-              name={`stage${currentStage}_q${currentQuestion.id}`}
-              value={answers[currentQuestion.id]}
-              onChange={handleAnswerChange}
-              direction="vertical"
-              fullWidth
+            <AnswerSection>
+              <AnswerLabel>답변을 선택해 주세요</AnswerLabel>
+              <RadioGroup
+                name={`stage${currentStage}_q${currentQuestion.id}`}
+                value={answers[currentQuestion.id]}
+                onChange={handleAnswerChange}
+                direction="vertical"
+                fullWidth
+              >
+                {options.map((option) => (
+                  <RadioOption
+                    key={option.value}
+                    name={`stage${currentStage}_q${currentQuestion.id}`}
+                    value={option.value}
+                    currentValue={answers[currentQuestion.id]}
+                    onChange={handleAnswerChange}
+                    label={option.label}
+                    fullWidth
+                  />
+                ))}
+              </RadioGroup>
+            </AnswerSection>
+
+            {/* 버튼 그룹 */}
+            <ButtonGroup>
+              <Button
+                variant="outline"
+                onClick={handlePrevious}
+                disabled={!canGoPrevious || isTransitioning}
+              >
+                이전
+              </Button>
+              <Button onClick={handleNext} disabled={!hasAnswer || isTransitioning}>
+                {isLastQuestionInStage && isLastStage
+                  ? "완료"
+                  : isLastQuestionInStage
+                  ? "다음 단계"
+                  : "다음"}
+              </Button>
+            </ButtonGroup>
+          </QuestionCard>
+
+          {/* 다음 질문 (슬라이드 인) */}
+          {isTransitioning && nextQuestion && (
+            <QuestionCard 
+              padding="xl" 
+              $isEntering={true}
             >
-              {options.map((option) => (
-                <RadioOption
-                  key={option.value}
-                  name={`stage${currentStage}_q${currentQuestion.id}`}
-                  value={option.value}
-                  currentValue={answers[currentQuestion.id]}
-                  onChange={handleAnswerChange}
-                  label={option.label}
+              <QuestionHeader>
+                <QuestionNumber>
+                  질문 {nextIndex + 1} / {nextQuestions.length}
+                </QuestionNumber>
+                {nextQuestion.category && (
+                  <CategoryBadge>{nextQuestion.category}</CategoryBadge>
+                )}
+              </QuestionHeader>
+
+              <Question>{nextQuestion.question}</Question>
+
+              <AnswerSection>
+                <AnswerLabel>답변을 선택해 주세요</AnswerLabel>
+                <RadioGroup
+                  name={`stage${nextStage}_q${nextQuestion.id}`}
+                  value={undefined}
+                  onChange={() => {}}
+                  direction="vertical"
                   fullWidth
-                />
-              ))}
-            </RadioGroup>
-          </AnswerSection>
+                >
+                  {nextOptions.map((option) => (
+                    <RadioOption
+                      key={option.value}
+                      name={`stage${nextStage}_q${nextQuestion.id}`}
+                      value={option.value}
+                      currentValue={undefined}
+                      onChange={() => {}}
+                      label={option.label}
+                      fullWidth
+                      disabled
+                    />
+                  ))}
+                </RadioGroup>
+              </AnswerSection>
 
-          {/* 버튼 그룹 */}
-          <ButtonGroup>
-            <Button
-              variant="outline"
-              onClick={handlePrevious}
-              disabled={!canGoPrevious}
-            >
-              이전
-            </Button>
-            <Button onClick={handleNext} disabled={!hasAnswer}>
-              {isLastQuestionInStage && isLastStage
-                ? "완료"
-                : isLastQuestionInStage
-                ? "다음 단계"
-                : "다음"}
-            </Button>
-          </ButtonGroup>
-        </QuestionCard>
+              <ButtonGroup>
+                <Button variant="outline" disabled>
+                  이전
+                </Button>
+                <Button disabled>다음</Button>
+              </ButtonGroup>
+            </QuestionCard>
+          )}
+        </QuestionCardContainer>
 
         {/* 힌트 */}
         <Hint>{getStageHint()}</Hint>
@@ -327,6 +446,7 @@ const Container = styled.div`
 const ContentWrapper = styled.div`
   max-width: 800px;
   margin: 0 auto;
+  overflow: hidden; /* 슬라이드 애니메이션 시 카드가 화면 밖으로 나가면서 잘림 */
 `;
 
 const Header = styled.div`
@@ -405,7 +525,77 @@ const InstructionText = styled.p`
   font-weight: ${({ theme }) => theme.fontWeight.medium};
 `;
 
-const QuestionCard = styled(Card)``;
+/* 질문 카드 컨테이너 (두 카드를 겹치게 배치) */
+const QuestionCardContainer = styled.div`
+  position: relative;
+  width: 100%;
+  min-height: 750px; /* 카드 높이 충분히 확보 */
+  margin-top: ${({ theme }) => theme.spacing.xl};
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.tablet}) {
+    min-height: 650px;
+  }
+`;
+
+const QuestionCard = styled(Card)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  /* 슬라이드 아웃 (왼쪽으로) */
+  ${({ $isExiting }) =>
+    $isExiting &&
+    `
+    animation: slideOutToLeft 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  `}
+  
+  /* 슬라이드 인 (오른쪽에서) */
+  ${({ $isEntering }) =>
+    $isEntering &&
+    `
+    animation: slideInFromRight 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  `}
+  
+  @keyframes slideOutToLeft {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  /* 성능 최적화 */
+  @media (prefers-reduced-motion: no-preference) {
+    will-change: transform, opacity;
+  }
+  
+  /* 접근성: 애니메이션 줄이기 선호 시 */
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: opacity 150ms ease;
+    
+    ${({ $isExiting }) =>
+      $isExiting &&
+      `
+      opacity: 0;
+    `}
+  }
+`;
 
 const QuestionHeader = styled.div`
   display: flex;
