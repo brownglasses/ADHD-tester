@@ -6,11 +6,10 @@ import Card from "@components/Card";
 import { ROUTES } from "@constants/routes";
 
 /**
- * WURS 완료 축하 페이지
- * WURS 검사 완료 후 사용자에게 격려 메시지 전달
- * 결과 페이지로 이동 전 마무리 안내
+ * 기능 저하 평가 완료 페이지
+ * 기능 저하 평가 완료 후 WURS로 전환 안내
  */
-function WursComplete() {
+function ImpairmentComplete() {
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(8);
 
@@ -20,17 +19,17 @@ function WursComplete() {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
       return () => clearTimeout(timer);
     } else {
-      // 자동으로 결과 페이지로
+      // 자동으로 다음 단계로
       handleNext();
     }
   }, [countdown]);
 
   const handleNext = () => {
-    navigate(ROUTES.RESULT);
+    navigate(ROUTES.WURS_INTRO);
   };
 
   const handleSkip = () => {
-    handleNext();
+    navigate(ROUTES.WURS_INTRO);
   };
 
   return (
@@ -40,36 +39,36 @@ function WursComplete() {
         <CelebrationCard padding="xl">
           {/* 아이콘 */}
           <IconWrapper>
-            <CelebrationIcon>🎊</CelebrationIcon>
+            <CelebrationIcon>✨</CelebrationIcon>
           </IconWrapper>
 
           {/* 메시지 */}
-          <Title>모든 검사를 완료했습니다!</Title>
-          <Subtitle>정말 수고 많으셨어요 (총 46문항 완료)</Subtitle>
+          <Title>2단계 완료!</Title>
+          <Subtitle>기능 저하 평가를 마쳤습니다 (3문항)</Subtitle>
 
           {/* 진행 상황 */}
           <ProgressSection>
             <ProgressTitle>전체 진행 상황</ProgressTitle>
             <StepIndicator>
-              <Step $completed data-completed>
+              <Step $completed>
                 <StepIcon>✓</StepIcon>
                 <StepLabel>ASRS</StepLabel>
                 <StepDescription>18문항 완료</StepDescription>
               </Step>
               <StepConnector />
-              <Step $completed data-completed>
+              <Step $completed>
                 <StepIcon>✓</StepIcon>
                 <StepLabel>기능 저하</StepLabel>
                 <StepDescription>3문항 완료</StepDescription>
               </Step>
               <StepConnector />
-              <Step $completed data-completed>
-                <StepIcon>✓</StepIcon>
+              <Step $current>
+                <StepIcon>3</StepIcon>
                 <StepLabel>WURS</StepLabel>
-                <StepDescription>25문항 완료</StepDescription>
+                <StepDescription>25문항 대기</StepDescription>
               </Step>
               <StepConnector />
-              <Step $current data-current>
+              <Step>
                 <StepIcon>4</StepIcon>
                 <StepLabel>결과</StepLabel>
                 <StepDescription>종합 분석</StepDescription>
@@ -79,54 +78,56 @@ function WursComplete() {
 
           {/* 격려 메시지 */}
           <MessageBox>
-            <MessageIcon>🎉</MessageIcon>
+            <MessageIcon>🎯</MessageIcon>
             <MessageText>
-              <MessageTitle>정말 잘하셨습니다!</MessageTitle>
+              <MessageTitle>절반 이상 진행했어요!</MessageTitle>
               <MessageDescription>
-                이제 종합 결과를 확인하실 수 있습니다.
+                다음은 <strong>아동기 증상 회상(WURS)</strong> 검사입니다.
                 <br />
-                현재와 과거의 증상을 바탕으로 전문가 상담이 필요한지 안내해 드립니다.
+                7-10세 시절을 떠올리며 25문항에 답변해 주세요.
+                <br />
+                <br />
+                ADHD는 <strong>아동기부터 증상이 있어야</strong> 진단이 가능합니다.
+                <br />
+                정확한 평가를 위해 과거를 떠올려 솔직하게 답변해 주세요.
               </MessageDescription>
             </MessageText>
           </MessageBox>
 
-          {/* 안내 메시지 */}
-          <InfoBox>
-            <InfoIcon>ℹ️</InfoIcon>
-            <InfoText>
-              <InfoTitle>결과 페이지에서는</InfoTitle>
-              <InfoList>
-                <InfoItem>• ASRS 점수 및 해석</InfoItem>
-                <InfoItem>• WURS 점수 및 해석</InfoItem>
-                <InfoItem>• 종합 소견 및 권장사항</InfoItem>
-                <InfoItem>• 전문의 상담 필요성 안내</InfoItem>
-              </InfoList>
-            </InfoText>
-          </InfoBox>
+          {/* 휴식 안내 */}
+          <BreakNotice>
+            <BreakIcon>☕</BreakIcon>
+            <BreakText>
+              잠시 쉬어가셔도 좋습니다. 준비되시면 아래 버튼을 눌러주세요.
+            </BreakText>
+          </BreakNotice>
 
           {/* 자동 전환 카운트다운 */}
           <CountdownSection>
             <CountdownText>
-              {countdown}초 후 결과 페이지로 이동합니다
+              {countdown}초 후 자동으로 다음 단계로 이동합니다
             </CountdownText>
             <CountdownBar>
               <CountdownFill $percentage={(8 - countdown) * 12.5} />
             </CountdownBar>
           </CountdownSection>
 
-          {/* 버튼 */}
-          <ButtonWrapper>
-            <Button onClick={handleSkip} size="lg" fullWidth>
-              결과 확인하기 →
+          {/* 버튼 그룹 */}
+          <ButtonGroup>
+            <Button variant="outline" onClick={() => navigate(ROUTES.LANDING)}>
+              나중에 하기
             </Button>
-          </ButtonWrapper>
+            <Button onClick={handleSkip} size="lg" fullWidth>
+              다음 단계로 →
+            </Button>
+          </ButtonGroup>
         </CelebrationCard>
       </ContentWrapper>
     </Container>
   );
 }
 
-export default WursComplete;
+export default ImpairmentComplete;
 
 // Animations
 const fadeIn = keyframes`
@@ -140,15 +141,12 @@ const fadeIn = keyframes`
   }
 `;
 
-const bounce = keyframes`
+const sparkle = keyframes`
   0%, 100% {
     transform: scale(1) rotate(0deg);
   }
-  25% {
-    transform: scale(1.1) rotate(-5deg);
-  }
-  75% {
-    transform: scale(1.1) rotate(5deg);
+  50% {
+    transform: scale(1.2) rotate(180deg);
   }
 `;
 
@@ -158,18 +156,6 @@ const pulse = keyframes`
   }
   50% {
     opacity: 0.7;
-  }
-`;
-
-const checkmark = keyframes`
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
   }
 `;
 
@@ -198,7 +184,7 @@ const CelebrationCard = styled(Card)`
   background: linear-gradient(
     135deg,
     ${({ theme }) => theme.colors.background.primary} 0%,
-    ${({ theme }) => theme.colors.successLight || theme.colors.primaryLight} 100%
+    ${({ theme }) => theme.colors.accent} 100%
   );
 `;
 
@@ -208,7 +194,7 @@ const IconWrapper = styled.div`
 
 const CelebrationIcon = styled.div`
   font-size: 80px;
-  animation: ${bounce} 2s ease-in-out infinite;
+  animation: ${sparkle} 2s ease-in-out infinite;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     font-size: 64px;
@@ -218,7 +204,7 @@ const CelebrationIcon = styled.div`
 const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSize["3xl"]};
   font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.success || theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: ${({ theme }) => theme.spacing.sm};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
@@ -229,28 +215,7 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   font-size: ${({ theme }) => theme.fontSize.lg};
   color: ${({ theme }) => theme.colors.text.secondary};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-`;
-
-const CompletionBadge = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm};
-  background: ${({ theme }) => theme.colors.success || theme.colors.primary};
-  color: white;
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  border-radius: ${({ theme }) => theme.borderRadius.full};
-  font-weight: ${({ theme }) => theme.fontWeight.semibold};
   margin-bottom: ${({ theme }) => theme.spacing.xl};
-`;
-
-const BadgeIcon = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  animation: ${checkmark} 600ms ease-out;
-`;
-
-const BadgeText = styled.span`
-  font-size: ${({ theme }) => theme.fontSize.base};
 `;
 
 const ProgressSection = styled.div`
@@ -353,7 +318,7 @@ const MessageText = styled.div`
 const MessageTitle = styled.div`
   font-size: ${({ theme }) => theme.fontSize.lg};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.success || theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
   margin-bottom: ${({ theme }) => theme.spacing.xs};
 `;
 
@@ -363,42 +328,24 @@ const MessageDescription = styled.div`
   line-height: 1.6;
 `;
 
-const InfoBox = styled.div`
+const BreakNotice = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.md};
-  align-items: flex-start;
-  text-align: left;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.md};
   background: ${({ theme }) => theme.colors.background.tertiary};
-  padding: ${({ theme }) => theme.spacing.lg};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  margin: ${({ theme }) => theme.spacing.xl} 0;
+  margin-bottom: ${({ theme }) => theme.spacing.xl};
 `;
 
-const InfoIcon = styled.div`
+const BreakIcon = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xl};
-  flex-shrink: 0;
 `;
 
-const InfoText = styled.div`
-  flex: 1;
-`;
-
-const InfoTitle = styled.div`
-  font-weight: ${({ theme }) => theme.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.text.primary};
-  margin-bottom: ${({ theme }) => theme.spacing.sm};
-`;
-
-const InfoList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const InfoItem = styled.div`
+const BreakText = styled.div`
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.text.secondary};
-  line-height: 1.5;
 `;
 
 const CountdownSection = styled.div`
@@ -422,13 +369,20 @@ const CountdownBar = styled.div`
 const CountdownFill = styled.div`
   height: 100%;
   width: ${({ $percentage }) => $percentage}%;
-  background: ${({ theme }) => theme.colors.success || theme.colors.primary};
+  background: ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.borderRadius.full};
   transition: width 1s linear;
 `;
 
-const ButtonWrapper = styled.div`
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: ${({ theme }) => theme.spacing.md};
   margin-top: ${({ theme }) => theme.spacing.xl};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: column;
+  }
 `;
+
 
 

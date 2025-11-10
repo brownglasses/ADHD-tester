@@ -58,28 +58,31 @@ function AsrsIntro() {
         {/* 메인 카드 - 검사 구성 안내 */}
         <MainCard padding="xl">
           <Icon>📋</Icon>
-          <Title>성인 ADHD 선별 검사</Title>
-          <Subtitle>Adult ADHD Self-Report Scale (ASRS-v1.1)</Subtitle>
+          <Title>성인 ADHD 종합 선별 검사</Title>
+          <Subtitle>ASRS + 기능 저하 평가 + WURS</Subtitle>
 
           <Description>
-            이 검사는 3단계로 구성되어 있으며, 각 단계는 DSM-5 진단 기준을
-            기반으로 합니다.
+            이 검사는 <strong>현재 증상, 기능 저하, 과거 증상</strong>을 종합적으로 평가하여
+            <br />
+            성인 ADHD 가능성을 정확하게 선별합니다.
           </Description>
 
           {/* 검사 구성 */}
           <TestStructureSection>
-            <SectionTitle>📝 검사 구성</SectionTitle>
+            <SectionTitle>📝 전체 검사 구성 (총 46문항, 약 15-20분)</SectionTitle>
             <StepList>
               <StepItem>
                 <StepNumber>1단계</StepNumber>
                 <StepContent>
-                  <StepTitle>증상 선별 질문</StepTitle>
+                  <StepTitle>ASRS 증상 선별 (18문항)</StepTitle>
                   <StepDescription>
-                    <strong>총 18문항</strong> (약 5-7분 소요)
+                    <strong>약 5-8분 소요</strong>
                     <br />
-                    최근 6개월 동안의 ADHD 증상을 평가합니다.
+                    • Part A (6문항): 핵심 부주의 증상
                     <br />
-                    출처: WHO ASRS-v1.1 (Part A + Part B)
+                    • Part B (12문항): 과잉행동/충동성 증상
+                    <br />
+                    <em>출처: WHO ASRS-v1.1, DSM-5 진단 기준</em>
                   </StepDescription>
                 </StepContent>
               </StepItem>
@@ -87,13 +90,17 @@ function AsrsIntro() {
               <StepItem>
                 <StepNumber>2단계</StepNumber>
                 <StepContent>
-                  <StepTitle>기능 저하 평가</StepTitle>
+                  <StepTitle>기능 저하 평가 (3문항)</StepTitle>
                   <StepDescription>
-                    <strong>총 3문항</strong> (약 1-2분 소요)
+                    <strong>약 2-3분 소요</strong>
                     <br />
-                    증상으로 인한 실제 삶의 어려움을 평가합니다.
+                    • 학업/직업 성과
                     <br />
-                    출처: DSM-5 진단 기준 'D항' (기능 저하)
+                    • 대인 관계
+                    <br />
+                    • 일상 관리 능력
+                    <br />
+                    <em>출처: DSM-5 진단 기준 'D항' (기능 저하)</em>
                   </StepDescription>
                 </StepContent>
               </StepItem>
@@ -101,13 +108,15 @@ function AsrsIntro() {
               <StepItem>
                 <StepNumber>3단계</StepNumber>
                 <StepContent>
-                  <StepTitle>아동기 발달력 확인</StepTitle>
+                  <StepTitle>WURS 아동기 증상 회상 (25문항)</StepTitle>
                   <StepDescription>
-                    <strong>총 1문항</strong> (약 1분 소요)
+                    <strong>약 5-7분 소요</strong>
                     <br />
-                    만 12세 이전 아동기 증상 여부를 확인합니다.
+                    • 7-10세 시절의 행동 및 감정 패턴
                     <br />
-                    출처: DSM-5 진단 기준 'B항' (발병 시기)
+                    • ADHD 진단의 핵심 요건: 아동기 증상 확인
+                    <br />
+                    <em>출처: Wender Utah Rating Scale, DSM-5 'B항'</em>
                   </StepDescription>
                 </StepContent>
               </StepItem>
@@ -121,7 +130,7 @@ function AsrsIntro() {
               <InfoItem>
                 <InfoIcon>⏱️</InfoIcon>
                 <InfoText>
-                  <strong>총 소요 시간:</strong> 약 7-10분
+                  <strong>총 소요 시간:</strong> 약 15-20분 (총 46문항)
                 </InfoText>
               </InfoItem>
               <InfoItem>

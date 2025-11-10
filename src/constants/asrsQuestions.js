@@ -2,13 +2,10 @@
  * ASRS (Adult ADHD Self-Report Scale) 질문 데이터
  * WHO에서 개발한 성인 ADHD 자가보고 척도 v1.1
  * 
- * 총 3단계로 구성:
- * - 1단계: 증상 선별 질문 (18문항)
- * - 2단계: 기능 저하 평가 (3문항)
- * - 3단계: 아동기 발달력 확인 (1문항)
+ * 표준 ASRS 18문항으로 구성:
+ * - Part A: 핵심 증상 (6문항)
+ * - Part B: 추가 증상 (12문항)
  */
-
-// ===== 1단계: 증상 선별 질문 (18문항) =====
 
 /**
  * ASRS Part A - 1차 핵심 증상 (6문항)
@@ -133,17 +130,14 @@ export const ASRS_PART_B = [
 ];
 
 /**
- * 전체 ASRS 증상 질문 (Part A + Part B)
+ * 전체 ASRS 질문 (Part A + Part B)
  */
-export const ASRS_SYMPTOM_QUESTIONS = [...ASRS_PART_A, ...ASRS_PART_B];
-
-// ===== 2단계: 기능 저하 평가 (3문항) =====
+export const ASRS_QUESTIONS = [...ASRS_PART_A, ...ASRS_PART_B];
 
 /**
- * 기능 저하 평가 질문
- * DSM-5 진단 기준 'D항' (기능 저하)
+ * 기능 저하 평가 질문 (DSM-5 진단 기준 'D항')
  */
-export const ASRS_IMPAIRMENT_QUESTIONS = [
+export const IMPAIRMENT_QUESTIONS = [
   {
     id: 1,
     question: "학업 성취나 업무 성과가 기대치보다 현저히 낮거나, 잠재력을 발휘하는 데 심각한 어려움을 겪고 있습니까?",
@@ -164,25 +158,10 @@ export const ASRS_IMPAIRMENT_QUESTIONS = [
   },
 ];
 
-// ===== 3단계: 아동기 발달력 확인 (1문항) =====
-
 /**
- * 아동기 발달력 질문
- * DSM-5 진단 기준 'B항' (발병 시기)
+ * 응답 옵션 (0-4점 척도)
  */
-export const ASRS_CHILDHOOD_QUESTION = {
-  id: 1,
-  question: "어린 시절(초등학생 또는 그 이전, 만 12세 이전)에도 지금 겪는 것과 비슷한 증상들(예: 집중력 부족, 산만함, 가만히 앉아있기 어려움, 충동적인 말이나 행동)이 뚜렷하게 있었습니까?",
-  category: "아동기",
-};
-
-// ===== 응답 옵션 =====
-
-/**
- * 1단계 (증상 선별) 응답 옵션
- * 0-4점 척도
- */
-export const ASRS_SYMPTOM_OPTIONS = [
+export const ASRS_OPTIONS = [
   { value: 0, label: "전혀 없음" },
   { value: 1, label: "드물게" },
   { value: 2, label: "가끔" },
@@ -191,34 +170,24 @@ export const ASRS_SYMPTOM_OPTIONS = [
 ];
 
 /**
- * 2단계 (기능 저하) 응답 옵션
- * 예/아니오
+ * 기능 저하 평가 응답 옵션 (예/아니오)
  */
-export const ASRS_IMPAIRMENT_OPTIONS = [
+export const IMPAIRMENT_OPTIONS = [
   { value: "yes", label: "예" },
   { value: "no", label: "아니오" },
 ];
 
 /**
- * 3단계 (아동기 발달력) 응답 옵션
- * 예/아니오/잘 모르겠음
+ * ASRS 검사 지시문
  */
-export const ASRS_CHILDHOOD_OPTIONS = [
-  { value: "yes", label: "예" },
-  { value: "no", label: "아니오" },
-  { value: "unknown", label: "잘 모르겠음" },
-];
-
-// ===== 지시문 =====
+export const ASRS_INSTRUCTION = 
+  "다음 질문들은 지난 6개월 동안 귀하가 어떻게 느끼고 행동했는지를 알아보기 위한 것입니다. 각 질문을 잘 읽고, 귀하에게 가장 잘 해당되는 칸에 표시해 주십시오.";
 
 /**
- * 각 단계별 지시문
+ * 기능 저하 평가 지시문
  */
-export const ASRS_INSTRUCTIONS = {
-  symptom: "다음 질문들은 지난 6개월 동안 귀하가 어떻게 느끼고 행동했는지를 알아보기 위한 것입니다. 각 질문을 잘 읽고, 귀하에게 가장 잘 해당되는 칸에 표시해 주십시오.",
-  impairment: "앞서 답한 증상들로 인해, 귀하의 실제 삶에 다음과 같은 어려움이 지속적으로 발생하고 있습니까?",
-  childhood: "과거를 회상해 볼 때, 다음 질문에 답해 주십시오.",
-};
+export const IMPAIRMENT_INSTRUCTION = 
+  "앞서 답한 증상들로 인해, 귀하의 실제 삶에 다음과 같은 어려움이 지속적으로 발생하고 있습니까?";
 
 // ===== 결과 해석 기준 =====
 

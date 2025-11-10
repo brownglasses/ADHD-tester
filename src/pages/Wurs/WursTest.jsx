@@ -13,6 +13,7 @@ import {
   WURS_INSTRUCTION,
   WURS_HINT,
 } from "@constants/wursQuestions";
+import useTestStore from "@store/useTestStore";
 
 /**
  * WURS 설문 테스트 페이지
@@ -47,10 +48,31 @@ function WursTest() {
 
   // 답변 저장
   const handleAnswerChange = (value) => {
-    setAnswers({
+    const newAnswers = {
       ...answers,
       [currentQuestion.id]: value,
-    });
+    };
+    setAnswers(newAnswers);
+
+    // 답변 선택 후 자동으로 다음 질문으로 이동 (400ms 딜레이)
+    setTimeout(() => {
+      if (isLastQuestion) {
+        // 마지막 질문: Store에 저장 후 완료 페이지로
+        const { saveWursAnswers } = useTestStore.getState();
+        saveWursAnswers(newAnswers);
+        console.log("✅ WURS 저장 완료:", newAnswers);
+        navigate(ROUTES.WURS_COMPLETE);
+      } else {
+        setNextIndex(currentIndex + 1);
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+          setCurrentIndex(currentIndex + 1);
+          setIsTransitioning(false);
+          setNextIndex(null);
+        }, 400);
+      }
+    }, 400);
   };
 
   // 다음 질문
@@ -93,12 +115,8 @@ function WursTest() {
 
   // 검사 완료
   const handleComplete = () => {
-    // TODO: Zustand store에 저장
+    // 이미 handleAnswerChange에서 저장했으므로 여기서는 이동만
     console.log("=== WURS 검사 완료 ===");
-    console.log("답변:", answers);
-    console.log("총점:", calculateScore());
-
-    // 축하 페이지로 이동
     navigate(ROUTES.WURS_COMPLETE);
   };
 

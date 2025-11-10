@@ -12,6 +12,7 @@ import {
   IMPAIRMENT_OPTIONS,
   IMPAIRMENT_INSTRUCTION,
 } from "@constants/asrsQuestions";
+import useTestStore from "@store/useTestStore";
 
 /**
  * 기능 저하 평가 테스트 페이지
@@ -47,10 +48,31 @@ function ImpairmentTest() {
 
   // 답변 선택
   const handleAnswerSelect = (value) => {
-    setAnswers({
+    const newAnswers = {
       ...answers,
       [currentQuestion.id]: value,
-    });
+    };
+    setAnswers(newAnswers);
+
+    // 답변 선택 후 자동으로 다음 질문으로 이동 (400ms 딜레이)
+    setTimeout(() => {
+      if (isLastQuestion) {
+        // 마지막 질문: Store에 저장 후 완료 페이지로
+        const { saveImpairmentAnswers } = useTestStore.getState();
+        saveImpairmentAnswers(newAnswers);
+        console.log("✅ 기능 저하 저장 완료:", newAnswers);
+        navigate(ROUTES.IMPAIRMENT_COMPLETE);
+      } else {
+        setNextIndex(currentIndex + 1);
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+          setCurrentIndex(currentIndex + 1);
+          setIsTransitioning(false);
+          setNextIndex(null);
+        }, 400);
+      }
+    }, 400);
   };
 
   // 다음 질문
@@ -101,11 +123,8 @@ function ImpairmentTest() {
 
   // 검사 완료
   const handleComplete = () => {
-    // TODO: Zustand store에 저장
+    // 이미 handleAnswerSelect에서 저장했으므로 여기서는 이동만
     console.log("=== 기능 저하 평가 완료 ===");
-    console.log("답변:", answers);
-
-    // 완료 페이지로 이동
     navigate(ROUTES.IMPAIRMENT_COMPLETE);
   };
 

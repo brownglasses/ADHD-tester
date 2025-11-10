@@ -12,32 +12,34 @@ const useTestStore = create(
     (set) => ({
       // ASRS 상태 (1단계: 현재 증상)
       asrs: {
-        answers: [], // [0, 1, 2, 3, 4, 0, ...]
+        answers: {}, // {questionId: value}
         score: null,
-        interpretation: null, // "낮음", "중간", "높음"
+        interpretation: null, // "low", "moderate", "high"
+        completedAt: null,
+      },
+
+      // 기능 저하 평가 (2단계)
+      impairment: {
+        answers: {}, // {questionId: value}
         completedAt: null,
       },
 
       // WURS 상태 (2단계: 과거 증상)
       wurs: {
-        answers: [],
+        answers: {}, // {questionId: value}
         score: null,
-        interpretation: null,
+        interpretation: null, // "low", "moderate", "high"
         completedAt: null,
       },
 
       // ASRS 액션
-      saveAsrsAnswer: (index, value) =>
-        set((state) => {
-          const newAnswers = [...state.asrs.answers];
-          newAnswers[index] = value;
-          return {
-            asrs: {
-              ...state.asrs,
-              answers: newAnswers,
-            },
-          };
-        }),
+      saveAsrsAnswers: (answers) =>
+        set((state) => ({
+          asrs: {
+            ...state.asrs,
+            answers,
+          },
+        })),
 
       completeAsrs: (score, interpretation) =>
         set((state) => ({
@@ -49,18 +51,24 @@ const useTestStore = create(
           },
         })),
 
+      // 기능 저하 평가 액션
+      saveImpairmentAnswers: (answers) =>
+        set((state) => ({
+          impairment: {
+            ...state.impairment,
+            answers,
+            completedAt: new Date().toISOString(),
+          },
+        })),
+
       // WURS 액션
-      saveWursAnswer: (index, value) =>
-        set((state) => {
-          const newAnswers = [...state.wurs.answers];
-          newAnswers[index] = value;
-          return {
-            wurs: {
-              ...state.wurs,
-              answers: newAnswers,
-            },
-          };
-        }),
+      saveWursAnswers: (answers) =>
+        set((state) => ({
+          wurs: {
+            ...state.wurs,
+            answers,
+          },
+        })),
 
       completeWurs: (score, interpretation) =>
         set((state) => ({
@@ -76,13 +84,17 @@ const useTestStore = create(
       resetAllTests: () =>
         set({
           asrs: {
-            answers: [],
+            answers: {},
             score: null,
             interpretation: null,
             completedAt: null,
           },
+          impairment: {
+            answers: {},
+            completedAt: null,
+          },
           wurs: {
-            answers: [],
+            answers: {},
             score: null,
             interpretation: null,
             completedAt: null,

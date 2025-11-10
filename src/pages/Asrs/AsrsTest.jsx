@@ -8,239 +8,117 @@ import ProgressBar from "@components/ProgressBar";
 import MiniStepper from "@components/MiniStepper";
 import { ROUTES } from "@constants/routes";
 import {
-  ASRS_SYMPTOM_QUESTIONS,
-  ASRS_IMPAIRMENT_QUESTIONS,
-  ASRS_CHILDHOOD_QUESTION,
-  ASRS_SYMPTOM_OPTIONS,
-  ASRS_IMPAIRMENT_OPTIONS,
-  ASRS_CHILDHOOD_OPTIONS,
-  ASRS_INSTRUCTIONS,
+  ASRS_QUESTIONS,
+  ASRS_OPTIONS,
+  ASRS_INSTRUCTION,
 } from "@constants/asrsQuestions";
+import useTestStore from "@store/useTestStore";
 
 /**
  * ASRS 설문 테스트 페이지
- * 3단계 구조로 진행:
- * - 1단계: 증상 선별 질문 (18문항)
- * - 2단계: 기능 저하 평가 (3문항)
- * - 3단계: 아동기 발달력 확인 (1문항)
+ * ASRS 증상 선별 질문 (18문항)
  */
 function AsrsTest() {
   const navigate = useNavigate();
 
-  // 현재 단계 (1, 2, 3)
-  const [currentStage, setCurrentStage] = useState(1);
-  // 각 단계 내 질문 인덱스
+  // 현재 질문 인덱스
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // 답변 저장
-  const [symptomAnswers, setSymptomAnswers] = useState({}); // 1단계
-  const [impairmentAnswers, setImpairmentAnswers] = useState({}); // 2단계
-  const [childhoodAnswer, setChildhoodAnswer] = useState(null); // 3단계
+  const [answers, setAnswers] = useState({}); // {questionId: value}
 
   // 애니메이션 상태
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [nextStage, setNextStage] = useState(null);
   const [nextIndex, setNextIndex] = useState(null);
 
   // 전체 검사 단계 (MiniStepper용)
   const testSteps = [
-    { label: "현재 증상", description: "ASRS 설문" },
-    { label: "과거 증상", description: "WURS 설문" },
+    { label: "ASRS 증상", description: "18문항" },
+    { label: "기능 저하", description: "3문항" },
+    { label: "WURS 아동기", description: "25문항" },
     { label: "결과 확인", description: "종합 분석" },
   ];
 
-  // 현재 단계별 질문 및 답변 가져오기
-  const getCurrentQuestions = () => {
-    if (currentStage === 1) return ASRS_SYMPTOM_QUESTIONS;
-    if (currentStage === 2) return ASRS_IMPAIRMENT_QUESTIONS;
-    if (currentStage === 3) return [ASRS_CHILDHOOD_QUESTION];
-    return [];
-  };
-
-  const getCurrentAnswers = () => {
-    if (currentStage === 1) return symptomAnswers;
-    if (currentStage === 2) return impairmentAnswers;
-    if (currentStage === 3) return { 1: childhoodAnswer };
-    return {};
-  };
-
-  const getCurrentOptions = () => {
-    if (currentStage === 1) return ASRS_SYMPTOM_OPTIONS;
-    if (currentStage === 2) return ASRS_IMPAIRMENT_OPTIONS;
-    if (currentStage === 3) return ASRS_CHILDHOOD_OPTIONS;
-    return [];
-  };
-
-  const getCurrentInstruction = () => {
-    if (currentStage === 1) return ASRS_INSTRUCTIONS.symptom;
-    if (currentStage === 2) return ASRS_INSTRUCTIONS.impairment;
-    if (currentStage === 3) return ASRS_INSTRUCTIONS.childhood;
-    return "";
-  };
-
-  const questions = getCurrentQuestions();
-  const answers = getCurrentAnswers();
-  const options = getCurrentOptions();
-  const instruction = getCurrentInstruction();
-
-  const currentQuestion = questions[currentIndex];
-  const totalQuestions = questions.length;
-  const isLastQuestionInStage = currentIndex === totalQuestions - 1;
-  const isLastStage = currentStage === 3;
+  const currentQuestion = ASRS_QUESTIONS[currentIndex];
+  const totalQuestions = ASRS_QUESTIONS.length;
+  const isLastQuestion = currentIndex === totalQuestions - 1;
   const hasAnswer = answers[currentQuestion.id] !== undefined && answers[currentQuestion.id] !== null;
 
-  // 전체 진행률 계산 (22문항 기준)
-  const getTotalProgress = () => {
-    let completed = 0;
-    const total = 22; // 18 + 3 + 1
-
-    // 1단계 완료된 질문
-    if (currentStage > 1) {
-      completed += 18;
-    } else {
-      completed += Object.keys(symptomAnswers).length;
-    }
-
-    // 2단계 완료된 질문
-    if (currentStage > 2) {
-      completed += 3;
-    } else if (currentStage === 2) {
-      completed += Object.keys(impairmentAnswers).length;
-    }
-
-    // 3단계 완료된 질문
-    if (currentStage === 3 && childhoodAnswer !== null) {
-      completed += 1;
-    }
-
-    return { current: completed, total };
-  };
-
-  const { current: totalCurrent, total: totalTotal } = getTotalProgress();
-
-  // 다음 질문 정보 가져오기 (애니메이션용)
-  const getNextQuestions = () => {
-    if (nextStage === 1) return ASRS_SYMPTOM_QUESTIONS;
-    if (nextStage === 2) return ASRS_IMPAIRMENT_QUESTIONS;
-    if (nextStage === 3) return [ASRS_CHILDHOOD_QUESTION];
-    return [];
-  };
-
-  const getNextOptions = () => {
-    if (nextStage === 1) return ASRS_SYMPTOM_OPTIONS;
-    if (nextStage === 2) return ASRS_IMPAIRMENT_OPTIONS;
-    if (nextStage === 3) return ASRS_CHILDHOOD_OPTIONS;
-    return [];
-  };
-
-  const nextQuestions = isTransitioning ? getNextQuestions() : [];
-  const nextOptions = isTransitioning ? getNextOptions() : [];
-  const nextQuestion = isTransitioning && nextQuestions[nextIndex] ? nextQuestions[nextIndex] : null;
+  // 다음 질문 (애니메이션용)
+  const nextQuestion = nextIndex !== null ? ASRS_QUESTIONS[nextIndex] : null;
 
   // 답변 저장
   const handleAnswerChange = (value) => {
-    if (currentStage === 1) {
-      setSymptomAnswers({
-        ...symptomAnswers,
-        [currentQuestion.id]: value,
-      });
-    } else if (currentStage === 2) {
-      setImpairmentAnswers({
-        ...impairmentAnswers,
-        [currentQuestion.id]: value,
-      });
-    } else if (currentStage === 3) {
-      setChildhoodAnswer(value);
-    }
+    const newAnswers = {
+      ...answers,
+      [currentQuestion.id]: value,
+    };
+    setAnswers(newAnswers);
+
+    // 답변 선택 후 자동으로 다음 질문으로 이동 (400ms 딜레이)
+    setTimeout(() => {
+      if (isLastQuestion) {
+        // 마지막 질문: Store에 저장 후 완료 페이지로
+        const { saveAsrsAnswers } = useTestStore.getState();
+        saveAsrsAnswers(newAnswers);
+        console.log("✅ ASRS 저장 완료:", newAnswers);
+        navigate(ROUTES.ASRS_COMPLETE);
+      } else {
+        setNextIndex(currentIndex + 1);
+        setIsTransitioning(true);
+
+        setTimeout(() => {
+          setCurrentIndex(currentIndex + 1);
+          setIsTransitioning(false);
+          setNextIndex(null);
+        }, 400);
+      }
+    }, 400);
   };
 
-  // 다음 질문 또는 다음 단계
+  // 다음 질문
   const handleNext = () => {
     if (!hasAnswer) {
       alert("답변을 선택해 주세요.");
       return;
     }
 
-    if (isLastQuestionInStage) {
-      // 현재 단계의 마지막 질문
-      if (isLastStage) {
-        // 전체 검사 완료
-        handleComplete();
-        return;
-      } else {
-        // 다음 단계로 이동
-        setNextStage(currentStage + 1);
-        setNextIndex(0);
-      }
-    } else {
-      // 같은 단계 내 다음 질문
-      setNextStage(currentStage);
-      setNextIndex(currentIndex + 1);
+    if (isLastQuestion) {
+      // ASRS 완료
+      handleComplete();
+      return;
     }
 
-    // 애니메이션 시작
+    // 다음 질문으로 이동
+    setNextIndex(currentIndex + 1);
     setIsTransitioning(true);
 
-    // 애니메이션 완료 후 실제 상태 업데이트
     setTimeout(() => {
-      if (isLastQuestionInStage) {
-        if (!isLastStage) {
-          setCurrentStage(currentStage + 1);
-          setCurrentIndex(0);
-        }
-      } else {
-        setCurrentIndex(currentIndex + 1);
-      }
-      
+      setCurrentIndex(currentIndex + 1);
       setIsTransitioning(false);
-      setNextStage(null);
       setNextIndex(null);
     }, 400);
   };
 
   // 이전 질문
   const handlePrevious = () => {
-    if (currentIndex > 0) {
-      // 같은 단계 내 이전 질문
-      setNextStage(currentStage);
-      setNextIndex(currentIndex - 1);
-    } else if (currentStage > 1) {
-      // 이전 단계의 마지막 질문으로
-      const prevQuestions = currentStage === 2 ? ASRS_SYMPTOM_QUESTIONS : ASRS_IMPAIRMENT_QUESTIONS;
-      setNextStage(currentStage - 1);
-      setNextIndex(prevQuestions.length - 1);
-    }
+    if (currentIndex === 0) return;
 
-    // 애니메이션 시작
+    setNextIndex(currentIndex - 1);
     setIsTransitioning(true);
 
-    // 애니메이션 완료 후 실제 상태 업데이트
     setTimeout(() => {
-      if (currentIndex > 0) {
-        setCurrentIndex(currentIndex - 1);
-      } else if (currentStage > 1) {
-        setCurrentStage(currentStage - 1);
-        const prevQuestions = currentStage === 2 ? ASRS_SYMPTOM_QUESTIONS : ASRS_IMPAIRMENT_QUESTIONS;
-        setCurrentIndex(prevQuestions.length - 1);
-      }
-      
+      setCurrentIndex(currentIndex - 1);
       setIsTransitioning(false);
-      setNextStage(null);
       setNextIndex(null);
     }, 400);
   };
 
   // 검사 완료
   const handleComplete = () => {
-    // TODO: Zustand store에 저장
+    // 이미 handleAnswerChange에서 저장했으므로 여기서는 이동만
     console.log("=== ASRS 검사 완료 ===");
-    console.log("1단계 - 증상 선별:", symptomAnswers);
-    console.log("2단계 - 기능 저하:", impairmentAnswers);
-    console.log("3단계 - 아동기 발달력:", childhoodAnswer);
-
-    alert("ASRS 설문이 완료되었습니다!");
-    // TODO: 결과 페이지 또는 다음 단계로 이동
-    navigate(ROUTES.LANDING);
+    navigate(ROUTES.ASRS_COMPLETE);
   };
 
   // 나가기 확인
@@ -253,26 +131,7 @@ function AsrsTest() {
     }
   };
 
-  // 단계별 제목
-  const getStageTitle = () => {
-    if (currentStage === 1) return "1단계: 증상 선별 질문";
-    if (currentStage === 2) return "2단계: 기능 저하 평가";
-    if (currentStage === 3) return "3단계: 아동기 발달력 확인";
-    return "";
-  };
-
-  // 단계별 힌트
-  const getStageHint = () => {
-    if (currentStage === 1)
-      return "💡 힌트: 정답은 없습니다. 최근 6개월 동안의 경험을 솔직하게 답변해 주세요.";
-    if (currentStage === 2)
-      return "💡 힌트: 증상으로 인해 실제 삶에서 겪는 어려움에 대해 답변해 주세요.";
-    if (currentStage === 3)
-      return "💡 힌트: 기억이 불확실하다면 '잘 모르겠음'을 선택하셔도 됩니다.";
-    return "";
-  };
-
-  const canGoPrevious = currentStage > 1 || currentIndex > 0;
+  const canGoPrevious = currentIndex > 0;
 
   return (
     <Container>
@@ -283,14 +142,14 @@ function AsrsTest() {
           <MiniStepper
             currentStep={0}
             steps={testSteps}
-            label="1단계 ASRS 설문 진행 중"
+            label="ASRS 증상 선별 진행 중"
           />
         </Header>
 
         {/* 전체 진행 바 */}
         <ProgressBar
-          current={totalCurrent}
-          total={totalTotal}
+          current={currentIndex + 1}
+          total={totalQuestions}
           variant="primary"
           size="md"
           labelFormat="fraction"
@@ -298,17 +157,17 @@ function AsrsTest() {
 
         {/* 단계 표시 */}
         <StageBadge>
-          {getStageTitle()}
+          ASRS 증상 선별 질문
           <StageProgress>
             ({currentIndex + 1}/{totalQuestions})
           </StageProgress>
         </StageBadge>
 
-        {/* 지시문 (각 단계 첫 질문에만 표시) */}
+        {/* 지시문 (첫 질문에만 표시) */}
         {currentIndex === 0 && (
           <InstructionCard padding="lg">
             <InstructionIcon>📌</InstructionIcon>
-            <InstructionText>{instruction}</InstructionText>
+            <InstructionText>{ASRS_INSTRUCTION}</InstructionText>
           </InstructionCard>
         )}
 
@@ -333,16 +192,16 @@ function AsrsTest() {
             <AnswerSection>
               <AnswerLabel>답변을 선택해 주세요</AnswerLabel>
               <RadioGroup
-                name={`stage${currentStage}_q${currentQuestion.id}`}
+                name={`question_${currentQuestion.id}`}
                 value={answers[currentQuestion.id]}
                 onChange={handleAnswerChange}
                 direction="vertical"
                 fullWidth
               >
-                {options.map((option) => (
+                {ASRS_OPTIONS.map((option) => (
                   <RadioOption
                     key={option.value}
-                    name={`stage${currentStage}_q${currentQuestion.id}`}
+                    name={`question_${currentQuestion.id}`}
                     value={option.value}
                     currentValue={answers[currentQuestion.id]}
                     onChange={handleAnswerChange}
@@ -363,11 +222,7 @@ function AsrsTest() {
                 이전
               </Button>
               <Button onClick={handleNext} disabled={!hasAnswer || isTransitioning}>
-                {isLastQuestionInStage && isLastStage
-                  ? "완료"
-                  : isLastQuestionInStage
-                  ? "다음 단계"
-                  : "다음"}
+                {isLastQuestion ? "완료" : "다음"}
               </Button>
             </ButtonGroup>
           </QuestionCard>
@@ -380,7 +235,7 @@ function AsrsTest() {
             >
               <QuestionHeader>
                 <QuestionNumber>
-                  질문 {nextIndex + 1} / {nextQuestions.length}
+                  질문 {nextIndex + 1} / {totalQuestions}
                 </QuestionNumber>
                 {nextQuestion.category && (
                   <CategoryBadge>{nextQuestion.category}</CategoryBadge>
@@ -392,16 +247,16 @@ function AsrsTest() {
               <AnswerSection>
                 <AnswerLabel>답변을 선택해 주세요</AnswerLabel>
                 <RadioGroup
-                  name={`stage${nextStage}_q${nextQuestion.id}`}
+                  name={`question_${nextQuestion.id}`}
                   value={undefined}
                   onChange={() => {}}
                   direction="vertical"
                   fullWidth
                 >
-                  {nextOptions.map((option) => (
+                  {ASRS_OPTIONS.map((option) => (
                     <RadioOption
                       key={option.value}
-                      name={`stage${nextStage}_q${nextQuestion.id}`}
+                      name={`question_${nextQuestion.id}`}
                       value={option.value}
                       currentValue={undefined}
                       onChange={() => {}}
@@ -424,7 +279,9 @@ function AsrsTest() {
         </QuestionCardContainer>
 
         {/* 힌트 */}
-        <Hint>{getStageHint()}</Hint>
+        <Hint>
+          💡 힌트: 정답은 없습니다. 최근 6개월 동안의 경험을 솔직하게 답변해 주세요.
+        </Hint>
       </ContentWrapper>
     </Container>
   );
@@ -542,6 +399,10 @@ const QuestionCard = styled(Card)`
   top: 0;
   left: 0;
   width: 100%;
+  
+  /* 기본 상태: 정상 위치에 완전히 보임 */
+  transform: translateX(0);
+  opacity: 1;
   
   /* 슬라이드 아웃 (왼쪽으로) */
   ${({ $isExiting }) =>
