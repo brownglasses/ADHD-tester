@@ -53,26 +53,34 @@ function AsrsComplete() {
             <StepIndicator>
               <Step $completed>
                 <StepIcon>✓</StepIcon>
-                <StepLabel>ASRS</StepLabel>
-                <StepDescription>18문항 완료</StepDescription>
+                <StepContent>
+                  <StepLabel>ASRS</StepLabel>
+                  <StepDescription>18문항 완료</StepDescription>
+                </StepContent>
               </Step>
               <StepConnector />
               <Step $current>
                 <StepIcon>2</StepIcon>
-                <StepLabel>기능 저하</StepLabel>
-                <StepDescription>3문항 대기</StepDescription>
+                <StepContent>
+                  <StepLabel>기능 저하</StepLabel>
+                  <StepDescription>3문항 대기</StepDescription>
+                </StepContent>
               </Step>
               <StepConnector />
               <Step>
                 <StepIcon>3</StepIcon>
-                <StepLabel>WURS</StepLabel>
-                <StepDescription>25문항 대기</StepDescription>
+                <StepContent>
+                  <StepLabel>WURS</StepLabel>
+                  <StepDescription>25문항 대기</StepDescription>
+                </StepContent>
               </Step>
               <StepConnector />
               <Step>
                 <StepIcon>4</StepIcon>
-                <StepLabel>결과</StepLabel>
-                <StepDescription>종합 분석</StepDescription>
+                <StepContent>
+                  <StepLabel>결과</StepLabel>
+                  <StepDescription>종합 분석</StepDescription>
+                </StepContent>
               </Step>
             </StepIndicator>
           </ProgressSection>
@@ -184,6 +192,10 @@ const CelebrationCard = styled(Card)`
     ${({ theme }) => theme.colors.background.primary} 0%,
     ${({ theme }) => theme.colors.primaryLight} 100%
   );
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: ${({ theme }) => theme.spacing.lg} !important;
+  }
 `;
 
 const IconWrapper = styled.div`
@@ -221,6 +233,11 @@ const ProgressSection = styled.div`
   padding: ${({ theme }) => theme.spacing.xl};
   background: ${({ theme }) => theme.colors.background.primary};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    padding: ${({ theme }) => theme.spacing.md};
+    margin: ${({ theme }) => theme.spacing.lg} 0;
+  }
 `;
 
 const ProgressTitle = styled.h3`
@@ -228,6 +245,11 @@ const ProgressTitle = styled.h3`
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text.primary};
   margin-bottom: ${({ theme }) => theme.spacing.lg};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    margin-bottom: ${({ theme }) => theme.spacing.md};
+  }
 `;
 
 const StepIndicator = styled.div`
@@ -239,6 +261,7 @@ const StepIndicator = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     flex-direction: column;
     align-items: stretch;
+    gap: ${({ theme }) => theme.spacing.xs};
   }
 `;
 
@@ -250,6 +273,14 @@ const Step = styled.div`
   gap: ${({ theme }) => theme.spacing.sm};
   opacity: ${({ $completed, $current }) => ($completed || $current ? 1 : 0.4)};
   transition: opacity ${({ theme }) => theme.transition.base};
+  min-width: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    flex-direction: row;
+    gap: ${({ theme }) => theme.spacing.xs};
+    text-align: left;
+    min-width: 0;
+  }
 `;
 
 const StepIcon = styled.div`
@@ -272,17 +303,52 @@ const StepIcon = styled.div`
   ${Step}[data-current] & {
     animation: ${pulse} 2s ease-in-out infinite;
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    width: 36px;
+    height: 36px;
+    font-size: ${({ theme }) => theme.fontSize.sm};
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+`;
+
+const StepContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  min-width: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
 `;
 
 const StepLabel = styled.div`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: ${({ theme }) => theme.fontWeight.semibold};
   color: ${({ theme }) => theme.colors.text.primary};
+  white-space: nowrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: ${({ theme }) => theme.fontSize.xs};
+    white-space: nowrap;
+  }
 `;
 
 const StepDescription = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xs};
   color: ${({ theme }) => theme.colors.text.secondary};
+  white-space: nowrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
+    font-size: 10px;
+    white-space: nowrap;
+  }
 `;
 
 const StepConnector = styled.div`

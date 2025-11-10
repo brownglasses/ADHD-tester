@@ -226,11 +226,7 @@ function Result() {
         <SectionTitle>📊 시각화 분석</SectionTitle>
         {asrsCategories && <AsrsRadarChart categoryAnalysis={asrsCategories} />}
         {wursCategories && <WursBarChart categoryAnalysis={wursCategories} />}
-        <ComprehensiveComparisonChart
-          asrs={asrs}
-          impairment={impairment}
-          wurs={wurs}
-        />
+        
       </Section>
 
       {/* 하단 액션 버튼 */}
